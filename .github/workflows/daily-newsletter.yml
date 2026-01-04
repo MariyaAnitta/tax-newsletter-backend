@@ -1,0 +1,39 @@
+name: Daily Tax Newsletter
+
+on:
+  schedule:
+    # Runs every day at 9:30 AM IST (4:00 AM UTC)
+    - cron: '0 4 * * *'
+  
+  workflow_dispatch:  # Allows manual testing
+
+jobs:
+  process-newsletter:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Run newsletter processor
+        env:
+          BROWSE_AI_API_KEY: ${{ secrets.BROWSE_AI_API_KEY }}
+          CIRCULARS_ROBOT_ID: ${{ secrets.CIRCULARS_ROBOT_ID }}
+          NOTIFICATIONS_ROBOT_ID: ${{ secrets.NOTIFICATIONS_ROBOT_ID }}
+          PRESS_RELEASES_ROBOT_ID: ${{ secrets.PRESS_RELEASES_ROBOT_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+          EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
+        run: |
+          python main.py
