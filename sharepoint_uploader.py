@@ -1,70 +1,23 @@
 import requests
 from datetime import datetime
 import config
+from html_formatter import HTMLFormatter  # Add this import
 
 class SharePointUploader:
     def __init__(self):
         self.webhook_url = config.POWER_AUTOMATE_WEBHOOK
+        self.html_formatter = HTMLFormatter()  # Add this
     
-    def format_newsletter_content(self, processed_data):
-        """Format the newsletter data into readable text"""
-        content = []
-        content.append("=" * 70)
-        content.append("INCOME TAX INDIA - DAILY NEWSLETTER")
-        content.append(f"Generated: {datetime.now().strftime('%B %d, %Y at %I:%M %p IST')}")
-        content.append("=" * 70)
-        content.append("\n")
-        
-        # Group by type
-        circulars = [d for d in processed_data if d['type'] == 'Circular']
-        notifications = [d for d in processed_data if d['type'] == 'Notification']
-        releases = [d for d in processed_data if d['type'] == 'Press Release']
-        
-        # Circulars section
-        if circulars:
-            content.append(f"📋 NEW CIRCULARS ({len(circulars)})")
-            content.append("-" * 70)
-            for i, item in enumerate(circulars, 1):
-                content.append(f"\n{i}. {item['number']}")
-                content.append(f"   Date: {item['date']}")
-                content.append(f"   Summary: {item['summary']}")
-                content.append(f"   PDF: {item.get('pdf_url', 'N/A')}")
-            content.append("\n")
-        
-        # Notifications section
-        if notifications:
-            content.append(f"📢 NEW NOTIFICATIONS ({len(notifications)})")
-            content.append("-" * 70)
-            for i, item in enumerate(notifications, 1):
-                content.append(f"\n{i}. {item['number']}")
-                content.append(f"   Date: {item['date']}")
-                content.append(f"   Summary: {item['summary']}")
-                content.append(f"   PDF: {item.get('pdf_url', 'N/A')}")
-            content.append("\n")
-        
-        # Press Releases section
-        if releases:
-            content.append(f"🗞️ NEW PRESS RELEASES ({len(releases)})")
-            content.append("-" * 70)
-            for i, item in enumerate(releases, 1):
-                content.append(f"\n{i}. {item.get('title', 'Untitled')}")
-                content.append(f"   Date: {item['date']}")
-            content.append("\n")
-        
-        content.append("=" * 70)
-        content.append("End of Newsletter")
-        content.append("=" * 70)
-        
-        return "\n".join(content)
+    # Keep the existing format_newsletter_content for text version
     
     def upload_to_sharepoint(self, processed_data):
         """Upload newsletter to SharePoint via Power Automate"""
         try:
-            # Format the content
-            newsletter_content = self.format_newsletter_content(processed_data)
+            # Generate HTML content
+            newsletter_content = self.html_formatter.format_newsletter_html(processed_data)
             
-            # Prepare filename with today's date
-            filename = f"Tax_Newsletter_{datetime.now().strftime('%Y-%m-%d')}.txt"
+            # Prepare filename with today's date - CHANGE TO .html
+            filename = f"Tax_Newsletter_{datetime.now().strftime('%Y-%m-%d')}.html"
             
             # Prepare payload for Power Automate
             payload = {
