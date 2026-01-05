@@ -4,7 +4,9 @@ from browse_ai_handler import BrowseAIHandler
 from pdf_processor import PDFProcessor
 from gemini_summarizer import GeminiSummarizer
 from email_sender import EmailSender
+from sharepoint_uploader import SharePointUploader  # NEW LINE
 from config import CIRCULARS_ROBOT_ID, NOTIFICATIONS_ROBOT_ID, PRESS_RELEASES_ROBOT_ID
+
 
 class TaxNewsletterProcessor:
     def __init__(self):
@@ -12,6 +14,7 @@ class TaxNewsletterProcessor:
         self.pdf_processor = PDFProcessor()
         self.summarizer = GeminiSummarizer()
         self.email_sender = EmailSender()
+        self.sharepoint_uploader = SharePointUploader()  # NEW LINE
         self.processed_data = []
     
     def process_circulars(self):
@@ -21,6 +24,7 @@ class TaxNewsletterProcessor:
         
         circulars = self.browse_ai.get_captured_data(CIRCULARS_ROBOT_ID, new_only=True)
         #circulars = self.browse_ai.get_captured_data(CIRCULARS_ROBOT_ID, new_only=False)
+
         
         if not circulars:
             print("No new circulars found")
@@ -28,7 +32,6 @@ class TaxNewsletterProcessor:
         
         print(f"Found {len(circulars)} NEW circulars\n")
         
-        # Process ALL new circulars (no limit)
         for circular in circulars:
             circular_num = circular.get('Circular Number', '').strip()
             date = circular.get('Publish Date', '').strip()
@@ -69,6 +72,7 @@ class TaxNewsletterProcessor:
         
         notifications = self.browse_ai.get_captured_data(NOTIFICATIONS_ROBOT_ID, new_only=True)
         #notifications = self.browse_ai.get_captured_data(NOTIFICATIONS_ROBOT_ID, new_only=False)
+
         
         if not notifications:
             print("No new notifications found")
@@ -76,7 +80,6 @@ class TaxNewsletterProcessor:
         
         print(f"Found {len(notifications)} NEW notifications\n")
         
-        # Process ALL new notifications
         for notification in notifications:
             notif_num = notification.get('Notification Number', '').strip()
             date = notification.get('Publish Date', '').strip()
@@ -117,6 +120,7 @@ class TaxNewsletterProcessor:
         
         releases = self.browse_ai.get_captured_data(PRESS_RELEASES_ROBOT_ID, new_only=True)
        # releases = self.browse_ai.get_captured_data(PRESS_RELEASES_ROBOT_ID, new_only=False)
+
         
         if not releases:
             print("No new press releases found")
@@ -124,7 +128,6 @@ class TaxNewsletterProcessor:
         
         print(f"Found {len(releases)} NEW press releases\n")
         
-        # Process ALL new press releases
         for release in releases:
             title = release.get('Title', '').strip()
             date = release.get('Date', '').strip()
@@ -154,7 +157,6 @@ class TaxNewsletterProcessor:
         
         print("\n" + "=" * 60)
         
-        # Check if any new items
         if self.processed_data:
             print(f"✅ Found {len(self.processed_data)} new items total")
             print("\nBreakdown:")
@@ -171,18 +173,30 @@ class TaxNewsletterProcessor:
             
             # Send email
             print("\n📧 Sending email via SendGrid...")
-            success = self.email_sender.send_newsletter(self.processed_data)
+            email_success = self.email_sender.send_newsletter(self.processed_data)
             
-            if success:
+            if email_success:
                 print("✅ Email sent successfully!")
             else:
                 print("❌ Email sending failed!")
+            
+            # NEW: Upload to SharePoint
+            print("\n📤 Uploading to SharePoint...")
+            sharepoint_success = self.sharepoint_uploader.upload_to_sharepoint(self.processed_data)
+            
+            if sharepoint_success:
+                print("✅ SharePoint upload successful!")
+            else:
+                print("⚠️ SharePoint upload had issues (check logs)")
+                
         else:
             print("✅ No new items detected (all content unchanged)")
             print("📧 No email sent (nothing to report)")
+            print("📤 No SharePoint upload (nothing to report)")
         
         print("=" * 60)
         print("✅ Processing complete!\n")
+
 
 if __name__ == "__main__":
     processor = TaxNewsletterProcessor()
