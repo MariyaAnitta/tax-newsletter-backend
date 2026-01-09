@@ -2,7 +2,8 @@ import ssl
 import certifi
 from browse_ai_handler import BrowseAIHandler
 from pdf_processor import PDFProcessor
-from gemini_summarizer import GeminiSummarizer
+#from gemini_summarizer import GeminiSummarizer
+from llm_summarizer import LLMSummarizer
 from email_sender import EmailSender
 from sharepoint_uploader import SharePointUploader  # NEW LINE
 from config import CIRCULARS_ROBOT_ID, NOTIFICATIONS_ROBOT_ID, PRESS_RELEASES_ROBOT_ID
@@ -12,7 +13,8 @@ class TaxNewsletterProcessor:
     def __init__(self):
         self.browse_ai = BrowseAIHandler()
         self.pdf_processor = PDFProcessor()
-        self.summarizer = GeminiSummarizer()
+        #self.summarizer = GeminiSummarizer()
+        self.summarizer = LLMSummarizer()  
         self.email_sender = EmailSender()
         self.sharepoint_uploader = SharePointUploader()  # NEW LINE
         self.processed_data = []

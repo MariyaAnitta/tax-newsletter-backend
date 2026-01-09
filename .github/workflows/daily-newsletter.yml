@@ -31,7 +31,8 @@ jobs:
           CIRCULARS_ROBOT_ID: ${{ secrets.CIRCULARS_ROBOT_ID }}
           NOTIFICATIONS_ROBOT_ID: ${{ secrets.NOTIFICATIONS_ROBOT_ID }}
           PRESS_RELEASES_ROBOT_ID: ${{ secrets.PRESS_RELEASES_ROBOT_ID }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          #GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
           EMAIL_FROM: ${{ secrets.EMAIL_FROM }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}

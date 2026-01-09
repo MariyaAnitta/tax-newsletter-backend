@@ -38,5 +38,12 @@ class PDFProcessor:
     def find_notification_pdf_url(self, notification_number):
         """Construct PDF URL for notification"""
         number = notification_number.replace('Notification No.', '').split('[')[0].replace(' ', '').replace(':', '').replace('/', '-').strip()
+        
+        # NEW: Handle leading zeros (05-2026 → 5-2026, 04-2026 → 4-2026)
+        parts = number.split('-')
+        if len(parts) >= 2:
+            parts[0] = parts[0].lstrip('0') or '0'  # Remove leading zeros
+            number = '-'.join(parts)
+        
         url = f"https://incometaxindia.gov.in/communications/notification/notification-{number.lower()}.pdf"
         return url
