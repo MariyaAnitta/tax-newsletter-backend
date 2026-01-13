@@ -24,8 +24,8 @@ class TaxNewsletterProcessor:
         print("\n📋 Processing Circulars...")
         print("-" * 60)
         
-        #circulars = self.browse_ai.get_captured_data(CIRCULARS_ROBOT_ID, new_only=True)
-        circulars = self.browse_ai.get_captured_data(CIRCULARS_ROBOT_ID, new_only=False)
+        circulars = self.browse_ai.get_captured_data(CIRCULARS_ROBOT_ID, new_only=True)
+        #circulars = self.browse_ai.get_captured_data(CIRCULARS_ROBOT_ID, new_only=False)
 
         
         if not circulars:
@@ -72,8 +72,8 @@ class TaxNewsletterProcessor:
         print("\n📢 Processing Notifications...")
         print("-" * 60)
         
-        #notifications = self.browse_ai.get_captured_data(NOTIFICATIONS_ROBOT_ID, new_only=True)
-        notifications = self.browse_ai.get_captured_data(NOTIFICATIONS_ROBOT_ID, new_only=False)
+        notifications = self.browse_ai.get_captured_data(NOTIFICATIONS_ROBOT_ID, new_only=True)
+        #notifications = self.browse_ai.get_captured_data(NOTIFICATIONS_ROBOT_ID, new_only=False)
 
         
         if not notifications:
@@ -120,8 +120,8 @@ class TaxNewsletterProcessor:
         print("\n🗞️ Processing Press Releases...")
         print("-" * 60)
         
-        #releases = self.browse_ai.get_captured_data(PRESS_RELEASES_ROBOT_ID, new_only=True)
-        releases = self.browse_ai.get_captured_data(PRESS_RELEASES_ROBOT_ID, new_only=False)
+        releases = self.browse_ai.get_captured_data(PRESS_RELEASES_ROBOT_ID, new_only=True)
+        #releases = self.browse_ai.get_captured_data(PRESS_RELEASES_ROBOT_ID, new_only=False)
 
         
         if not releases:
